@@ -1,0 +1,97 @@
+.body {
+  background: #070707;
+}
+
+.main {
+  margin: 35px auto;
+  width: fit-content;
+  padding: 20px;
+  border-radius: 10px;
+  border: 3px solid #ffffff;
+}
+
+.autocomplete {
+  width: 500px;
+  margin: 40px 65px;
+}
+
+.autocomplete-input {
+  padding-left: 6px;
+  background: #ffffff;
+  width: inherit;
+  font-size: 48px;
+  border: none;
+  outline: none;
+  border-radius: 10px;
+}
+
+.autocomplete-button {
+  display: inline-block;
+  background: #ffffff;
+  font-size: 32px;
+  width: 510px;
+  text-align: left;
+  border-radius: 10px;
+}
+
+.autocomplete-button:focus {
+  background-color: #52DFEA;
+}
+
+.autocomplete-button:hover {
+  background-color: #52DFEA;
+  cursor: pointer;
+}
+
+.wrapper-records {
+  width: fit-content;
+  margin: auto;
+}
+
+.record {
+  width: 510px;
+  min-height: 100px;
+  font-family: Roboto;
+  display: flex;
+  justify-content: space-between;
+  word-break: break-all;
+  color: #ffffff;
+  font-size: 24px;
+  line-height: 28px;
+  background: #070707;
+  box-sizing: border-box;
+  padding: 8px 16px;
+  margin-left: 10px;
+  border: 3px solid #ffffff;
+  border-radius: 10px;
+}
+
+.close {
+  width: 50px;
+  height: 50px;
+  margin-top: 10px;
+  opacity: 0.7;
+}
+
+.close:hover {
+  opacity: 1;
+  cursor: pointer;
+  transition: all 0.3s;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.close:before, .close:after {
+  position: absolute;
+  content: ' ';
+  height: 60px;
+  width: 6px;
+  background-color: #ffffff;
+}
+
+.close:before {
+  transform: rotate(45deg);
+}
+
+.close:after {
+  transform: rotate(-45deg);
+}
