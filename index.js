@@ -42,11 +42,11 @@ async function search() {
 
   let listsArray = Array.from(lists);
   for (let i = 0; i < countOfHints; i++) {
-    updateBtn(result.items[i], listsArray[i]);
+    updateList(result.items[i], listsArray[i]);
   }
 }
 
-function updateBtn(elem, list){
+function updateList(elem, list){
   if (!elem) return
   list.innerText = elem.name;
   list.repoDate = elem;
@@ -74,20 +74,37 @@ function addRecord(evt) {
   let data = evt.target.repoDate;
   let record = document.createElement('div');
   record.className = 'record';
-  record.insertAdjacentHTML('afterBegin', `<p>Name: ${data.name}</p><p>Owner: ${data.owner.login}</p><p>Stars: ${data.stargazers_count}</p>`);
+  // record.insertAdjacentHTML('afterBegin', `<p class = "info">Name: ${data.name}</p>
+  //                                          <p class = "info">Owner: ${data.owner.login}</p>
+  //                                          <p class = "info">Stars: ${data.stargazers_count}</p>`);
 
-  addDeleter(record);
+
+  let name = `Name: ${data.name}`;
+  let owner = `Owner: ${data.owner.login}`;
+  let stars = `Stars: ${data.stargazers_count}`;
+  let arr = [name, owner, stars],
+  container = record.querySelector('.record');
+
+  arr.forEach((text) => {
+    const info = document.createElement('p');
+    info.textContent = text;
+    info.className = 'info';
+    record.appendChild(info);
+  });
+
+
+  addDelete(record);
   records.append(record);
   input.value = '';
   setTimeout(clearList, 300);
 }
 
-function addDeleter(elem) {
-  let deleter = document.createElement('button');
-  deleter.className = 'close';
-  deleter.addEventListener('click', () => {
+function addDelete(elem) {
+  let parentDelete = document.createElement('button');
+  parentDelete.className = 'close';
+  parentDelete.addEventListener('click', () => {
     elem.remove();
   })
 
-  elem.append(deleter);
+  elem.append(parentDelete);
 }
