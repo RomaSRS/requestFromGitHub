@@ -13,6 +13,7 @@
 .autocomplete {
   width: 500px;
   margin: 40px 65px;
+  padding-left: initial;
 }
 
 .autocomplete-input {
@@ -25,20 +26,22 @@
   border-radius: 10px;
 }
 
-.autocomplete-button {
+.autocomplete-list {
   display: inline-block;
   background: #ffffff;
   font-size: 32px;
-  width: 510px;
+  width: 500px;
   text-align: left;
   border-radius: 10px;
+  margin-top: 5px;
+  padding: 0 0 0 10px;
 }
 
-.autocomplete-button:focus {
+.autocomplete-list:focus {
   background-color: #52DFEA;
 }
 
-.autocomplete-button:hover {
+.autocomplete-list:hover {
   background-color: #52DFEA;
   cursor: pointer;
 }
@@ -53,31 +56,38 @@
   min-height: 100px;
   font-family: Roboto;
   display: flex;
-  justify-content: space-between;
-  word-break: break-all;
+  flex-direction: column;
   color: #ffffff;
   font-size: 24px;
-  line-height: 28px;
   background: #070707;
   box-sizing: border-box;
+  margin: 5px 0 0 10px;
   padding: 8px 16px;
-  margin-left: 10px;
   border: 3px solid #ffffff;
   border-radius: 10px;
 }
 
+.info {
+  margin: inherit;
+}
+
 .close {
+  position: absolute;
   width: 50px;
   height: 50px;
-  margin-top: 10px;
+  margin-left: 400px;
   opacity: 0.7;
+  border: none;
+  font: inherit;
+  color: inherit;
+  background-color: transparent;
 }
 
 .close:hover {
   opacity: 1;
   cursor: pointer;
   transition: all 0.3s;
-  -webkit-tap-highlight-color: transparent;
+  outline: none;
 }
 
 .close:before, .close:after {

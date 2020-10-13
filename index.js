@@ -3,7 +3,7 @@
 const autocomplete = document.querySelector('.autocomplete');
 const input = autocomplete.firstElementChild;
 const records = document.querySelector('.wrapper-records');
-let btnsCreate = false;
+let listsCreate = false;
 
 const debounce = (fn, debounceTime) => {
 
@@ -11,7 +11,7 @@ const debounce = (fn, debounceTime) => {
     
   return function () {
     const fnCall = () => { 
-      fn.apply(this, arguments) 
+      fn.apply(this, arguments);
     }
 
     clearTimeout(timeout);
@@ -29,66 +29,82 @@ async function search() {
     return;
   }
     
-  let url = `https://api.github.com/search/repositories?q=${input.value}&sort=stars&order=desc`;
-  let response = await fetch(url);
+  const BASE_URL = `https://api.github.com/search/repositories?q=${input.value}&sort=stars&order=desc`;
+  const quantityOfoResponses = 5;
+  let response = await fetch(BASE_URL);
   let result = await response.json();
 
-  let countOfHints = result.items.length
-  countOfHints = (countOfHints > 5) ? 5 : countOfHints;
+  let countOfHints = result.items.length;
+  countOfHints = (countOfHints > quantityOfoResponses) ? quantityOfoResponses : countOfHints;
 
-  if (!btnsCreate) createBtns(countOfHints)
-  let btns = document.querySelectorAll('.autocomplete-button');
+  if (!listsCreate) createLists(countOfHints)
+  let lists = document.querySelectorAll('.autocomplete-list');
 
-  let btnsArray = Array.from(btns);
+  let listsArray = Array.from(lists);
   for (let i = 0; i < countOfHints; i++) {
-      updateBtn(result.items[i], btnsArray[i]);
+    updateList(result.items[i], listsArray[i]);
   }
 }
 
-function updateBtn(elem, btn){
+function updateList(elem, list){
   if (!elem) return
-  btn.innerText = elem.name
-  btn.repoDate = elem
+  list.innerText = elem.name;
+  list.repoDate = elem;
 }
 
 function clearList(){
   let arr = Array.from(autocomplete.children).slice(1);
   arr.forEach(elem => elem.remove());
-  btnsCreate = false;
+  listsCreate = false;
 }
 
-function createBtns(count){ 
-
-    for (let i = 0; i < count; i++) {
-        let btn = document.createElement('button')
-        btn.className = 'autocomplete-button'
-        btn.addEventListener('click', addRecord)
-        autocomplete.append(btn)
-        btnsCreate = true
-    }
+function createLists(count){
+  
+  for (let i = 0; i < count; i++) {
+    let list = document.createElement('li');
+    list.className = 'autocomplete-list';
+    list.addEventListener('click', addRecord);
+    autocomplete.append(list);
+    listsCreate = true;
+  }
 }
 
 function addRecord(evt) {
-    
-    let data = evt.target.repoDate
-    let record = document.createElement('div')
-    record.className = 'record'
-    record.innerText = `Name: ${data.name}
-    Owner: ${data.owner.login}
-    Stars: ${data.stargazers_count}`
+  
+  let data = evt.target.repoDate;
+  let record = document.createElement('div');
+  record.className = 'record';
+  // record.insertAdjacentHTML('afterBegin', `<p class = "info">Name: ${data.name}</p>
+  //                                          <p class = "info">Owner: ${data.owner.login}</p>
+  //                                          <p class = "info">Stars: ${data.stargazers_count}</p>`);
 
-    addDeleter(record)
-    records.append(record)
-    input.value = ''
-    setTimeout(clearList, 300)
+
+  let name = `Name: ${data.name}`;
+  let owner = `Owner: ${data.owner.login}`;
+  let stars = `Stars: ${data.stargazers_count}`;
+  let arr = [name, owner, stars],
+  container = record.querySelector('.record');
+
+  arr.forEach((text) => {
+    const info = document.createElement('p');
+    info.textContent = text;
+    info.className = 'info';
+    record.appendChild(info);
+  });
+
+
+  addDelete(record);
+  records.append(record);
+  input.value = '';
+  setTimeout(clearList, 300);
 }
 
-function addDeleter(elem) {
-  let deleter = document.createElement('div');
-  deleter.className = 'close';
-  deleter.addEventListener('click', () => {
+function addDelete(elem) {
+  let parentDelete = document.createElement('button');
+  parentDelete.className = 'close';
+  parentDelete.addEventListener('click', () => {
     elem.remove();
   })
 
-  elem.append(deleter);
+  elem.append(parentDelete);
 }
