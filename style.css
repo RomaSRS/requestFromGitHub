@@ -16,7 +16,7 @@
   padding-left: initial;
 }
 
-.autocomplete-input {
+.autocomplete__input {
   padding-left: 6px;
   background: #ffffff;
   width: inherit;
@@ -26,7 +26,7 @@
   border-radius: 10px;
 }
 
-.autocomplete-list {
+.autocomplete__list {
   display: inline-block;
   background: #ffffff;
   font-size: 32px;
@@ -37,21 +37,22 @@
   padding: 0 0 0 10px;
 }
 
-.autocomplete-list:focus {
+.autocomplete__list:focus {
   background-color: #52DFEA;
 }
 
-.autocomplete-list:hover {
+.autocomplete__list:hover {
   background-color: #52DFEA;
   cursor: pointer;
 }
 
-.wrapper-records {
+.record-wrapper {
   width: fit-content;
   margin: auto;
+  padding: inherit;
 }
 
-.record {
+.record-wrapper__list {
   width: 510px;
   min-height: 100px;
   font-family: Roboto;
@@ -67,41 +68,45 @@
   border-radius: 10px;
 }
 
-.info {
+.record-wrapper__info {
   margin: inherit;
 }
 
-.close {
+.record-wrapper__btn-close {
   position: absolute;
-  width: 50px;
-  height: 50px;
-  margin-left: 400px;
-  opacity: 0.7;
-  border: none;
-  font: inherit;
-  color: inherit;
-  background-color: transparent;
+  width: 55px;
+  height: 55px;
+  margin: 20px 0 0 400px;
+  cursor: pointer;
+  background: #070707;
+  border: 4px solid #ffffff;
+  border-radius: 50%;
 }
 
-.close:hover {
+.record-wrapper__btn-close:hover {
   opacity: 1;
   cursor: pointer;
   transition: all 0.3s;
   outline: none;
 }
 
-.close:before, .close:after {
+.record-wrapper__btn-close:before,
+.record-wrapper__btn-close:after {
+  content: "";
   position: absolute;
-  content: ' ';
-  height: 60px;
-  width: 6px;
-  background-color: #ffffff;
+  top: 21px;
+  left: 9px;
+  width: 30px;
+  height: 4px;
+  background: #ffffff;
 }
 
-.close:before {
+.record-wrapper__btn-close:before {
+  webkit-transform: rotate(45deg);
   transform: rotate(45deg);
 }
 
-.close:after {
+.record-wrapper__btn-close:after {
+  webkit-transform: rotate(-45deg);
   transform: rotate(-45deg);
 }
