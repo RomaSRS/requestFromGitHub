@@ -102,11 +102,9 @@
 }
 
 .record-wrapper__btn-close:before {
-  webkit-transform: rotate(45deg);
   transform: rotate(45deg);
 }
 
 .record-wrapper__btn-close:after {
-  webkit-transform: rotate(-45deg);
   transform: rotate(-45deg);
 }
