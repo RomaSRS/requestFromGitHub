@@ -2,7 +2,7 @@
 
 const QUANTITY_OF_RESPONSES = 5;
 const autocomplete = document.querySelector('.autocomplete');
-const input = autocomplete.firstElementChild;
+const input = document.querySelector('.autocomplete__input');
 const records = document.querySelector('.record-wrapper');
 const BASE_URL = 'https://api.github.com/search/repositories?sort=stars&order=desc';
 
