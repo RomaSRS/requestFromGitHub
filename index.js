@@ -1,111 +1,104 @@
 'use strict';
 
+const QUANTITY_OF_RESPONSES = 5;
 const autocomplete = document.querySelector('.autocomplete');
 const input = autocomplete.firstElementChild;
 const records = document.querySelector('.record-wrapper');
+const BASE_URL = 'https://api.github.com/search/repositories?sort=stars&order=desc';
+
 let listsCreate = false;
 
-const debounce = (fn, debounceTime) => {
+function debounceFn(fn, debounceTime) {
 
   let timeout;
-    
-  return function () {
-    const fnCall = () => { 
-      fn.apply(this, arguments);
-    }
 
+  return () => {
     clearTimeout(timeout);
-    timeout = setTimeout(fnCall, debounceTime);
+    timeout = setTimeout(fn, debounceTime);
   };
 }
 
-const debouncedSearch = debounce(search, 500);
-
 async function search() {
 
-  const BASE_URL = `https://api.github.com/search/repositories?q=${input.value}&sort=stars&order=desc`;
-  const quantityOfoResponses = 5;
-  let response = await fetch(BASE_URL);
-  let result = await response.json();
-  let countOfHints = result.items.length;
+  const response = await fetch(`${BASE_URL}&q=${input.value}`);
+  const result = await response.json();
+  const countOfHints = result.items.length > QUANTITY_OF_RESPONSES ? QUANTITY_OF_RESPONSES : result.items.length;
 
   if (!input.value) {
     clearList()
-    return;
-  }
+  } else {
+    if (!listsCreate) createLists(countOfHints)
 
-  countOfHints = (countOfHints > quantityOfoResponses) ? quantityOfoResponses : countOfHints;
+    const lists = document.querySelectorAll('.autocomplete__list');
+    const listsArray = Array.from(lists);
 
-  if (!listsCreate) createLists(countOfHints)
-  let lists = document.querySelectorAll('.autocomplete__list');
-
-  let listsArray = Array.from(lists);
-  for (let i = 0; i < countOfHints; i++) {
-    updateList(result.items[i], listsArray[i]);
+    for (let i = 0; i < countOfHints; i++) {
+      updateList(result.items[i], listsArray[i]);
+    }
   }
 }
 
-function updateList(elem, list){
-  if (!elem) return
-  list.innerText = elem.name;
-  list.repoDate = elem;
+function updateList(elem, list) {
+  if (elem) {
+    list.innerText = elem.name;
+    list.repoDate = elem;
+  }
 }
 
-function clearList(){
-  let arr = Array.from(autocomplete.children).slice(1);
+function clearList() {
+  const arr = Array.from(autocomplete.children).slice(1);
+
   arr.forEach(elem => elem.remove());
   listsCreate = false;
 }
 
-function addRecord(evt) {
-  
-  let data = evt.target.repoDate;
-  let record = document.createElement('li');
-  let name = `Name: ${data.name}`;
-  let owner = `Owner: ${data.owner.login}`;
-  let stars = `Stars: ${data.stargazers_count}`;
-  let arr = [name, owner, stars],
-  container = record.querySelector('.record-wrapper__list');
-  record.className = 'record-wrapper__list';
+function addRecord(event) {
+  if (event.target.className === 'autocomplete__list') {
+    const data = event.target.repoDate;
+    const record = document.createElement('li');
+    const name = `Name: ${data.name}`;
+    const owner = `Owner: ${data.owner.login}`;
+    const stars = `Stars: ${data.stargazers_count}`;
+    const arr = [name, owner, stars];
 
-  // record.insertAdjacentHTML('afterBegin', `<p class = "info">Name: ${data.name}</p>
-  //                                          <p class = "info">Owner: ${data.owner.login}</p>
-  //                                          <p class = "info">Stars: ${data.stargazers_count}</p>`);
+    record.className = 'record-wrapper__list';
 
-
-  arr.forEach((text) => {
-    const info = document.createElement('p');
-    info.textContent = text;
-    info.className = 'record-wrapper__info';
-    record.appendChild(info);
-  });
+    arr.forEach((text) => {
+      const info = document.createElement('p');
+      info.textContent = text;
+      info.className = 'record-wrapper__info';
+      record.appendChild(info);
+    });
 
 
-  addButtonDelete(record);
-  records.append(record);
-  input.value = '';
-  setTimeout(clearList, 300);
-}
-
-input.addEventListener('input', debouncedSearch);
-
-function createLists(count){
-  
-  for (let i = 0; i < count; i++) {
-    let list = document.createElement('li');
-    list.className = 'autocomplete__list';
-    list.addEventListener('click', addRecord);
-    autocomplete.append(list);
-    listsCreate = true;
+    addButtonDelete(record);
+    records.append(record);
+    input.value = '';
+    setTimeout(clearList, 300);
   }
 }
 
+function createLists(count) {
+  listsCreate = true;
+
+  for (let i = 0; i < count; i++) {
+    const list = document.createElement('li');
+
+    list.className = 'autocomplete__list';
+    autocomplete.append(list);
+  }
+  autocomplete.addEventListener('click', addRecord);
+}
+
 function addButtonDelete(elem) {
-  let deleteButtonClickHandler = document.createElement('button');
-  deleteButtonClickHandler.className = 'record-wrapper__btn-close';
-  deleteButtonClickHandler.addEventListener('click', () => {
+  const closeButton = document.createElement('button');
+
+  closeButton.className = 'record-wrapper__btn-close';
+  closeButton.addEventListener('click', () => {
     elem.remove();
   })
 
-  elem.append(deleteButtonClickHandler);
+  elem.append(closeButton);
 }
+
+input.addEventListener('input', debounceFn(search, 500));
